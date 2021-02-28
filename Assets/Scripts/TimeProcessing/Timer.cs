@@ -21,7 +21,7 @@ public class Timer : ITimedItem, IDisposable
 
     public void Dispose()
     {
-       container.Remove(this);
+        container.Remove(this);
     }
 
     public void ProcessTimePassing()
@@ -31,18 +31,27 @@ public class Timer : ITimedItem, IDisposable
         {
             elapsedTime -= animationTime;
 
-            ProcessTimeEnded();
-            timedItem?.ProcessTimeEnded();
+            if (timedItem == null)
+            {
+                ProcessTimeEnded();
+            }
+            else
+            {
+                timedItem.ProcessTimeEnded();
+            }
         }
         normalizedTime = elapsedTime / animationTime;
 
-        DoActionWhileTimePassing();
-        timedItem?.ProcessTimePassing();
+      
+            DoActionWhileTimePassing();
+     
+            timedItem?.ProcessTimePassing();
+        
     }
 
     protected virtual void DoActionWhileTimePassing() { }
 
-    public void ExecuteCallback() 
+    public void ExecuteCallback()
     {
         callback?.Invoke();
     }
@@ -51,5 +60,6 @@ public class Timer : ITimedItem, IDisposable
     {
         callback?.Invoke();
         container.Remove(this);
+        callback = null;
     }
 }

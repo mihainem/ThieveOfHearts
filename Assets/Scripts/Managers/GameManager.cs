@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour, ITimedItem
     [SerializeField] private Transform collectablesParent;
 
     private List<GameObject> collectablesList;
-    private MovingObject movingObjectProcessor;
 
 
     [SerializeField] private int maxTimeInSeconds= 5;
@@ -38,7 +37,6 @@ public class GameManager : MonoBehaviour, ITimedItem
             return _totalCollected;   
         }
         set {
-            Debug.LogError("Setting total collected");
             _totalCollected = value;
             ui.collection.elementValue.text = _totalCollected.ToString();
         }
@@ -70,6 +68,7 @@ public class GameManager : MonoBehaviour, ITimedItem
 
     private void StartTimer()
     {
+        maxTimeInSeconds = levelController.GetNoOfTiles() * 3;
         timer = new Timer(TimeManager.Instance, maxTimeInSeconds, this);
     }
 
@@ -82,23 +81,28 @@ public class GameManager : MonoBehaviour, ITimedItem
     {
         collectablesList = new List<GameObject>();
         StartCoroutine(levelController.PlaceInEveryCellCoroutine(ResourcesManager.Instance.Heart, collectablesList, collectablesParent));
+    
     }
 
     private void ClearAllCollectables() 
-    {
-        for (int i = collectablesParent.childCount - 1; i >= 0; i--) 
+    {   
+        if (collectablesParent == null)
+            return;
+
+        foreach(Transform child in collectablesParent)
         {
-            Destroy(collectablesParent.GetChild(i).gameObject);
+            if(child!=collectablesParent)
+                Destroy(child.gameObject);
         }
     }
 
     internal void ProcessCollecting(Collectable collectable, Action callback = null)
     {
         collectable.enabled = false;
-        movingObjectProcessor = TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 0.5f, null,
+        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 0.5f, null,
             delegate () {
-                TotalCollected += 1;
-                if (TotalCollected == 2) 
+                TotalCollected++;
+                if (TotalCollected >= collectablesList.Count) 
                 {
                     ui.ShowWinPanel(TotalCollected);
                 }
@@ -111,8 +115,6 @@ public class GameManager : MonoBehaviour, ITimedItem
     {
         TotalCollected = 0;
         ClearAllCollectables();
-        TimeManager.Instance.Remove(movingObjectProcessor);
-        movingObjectProcessor = null;
     }
 
     public void ProcessTimePassing()
@@ -123,6 +125,7 @@ public class GameManager : MonoBehaviour, ITimedItem
 
     public void ProcessTimeEnded()
     {
+        TimeManager.Instance.Remove(timer);
         playerMovement.SetStartAction(false);
         TimeManager.Instance.DelayedCall(1f, ui.TryShowFailedPanel);
     }

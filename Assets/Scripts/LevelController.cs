@@ -80,19 +80,21 @@ public class LevelController : MonoBehaviour
         SetupPath(localTilesPositions, tileMap);
     }
 
-    internal List<Vector3Int> GetAllTiles()
+    internal int GetNoOfTiles()
     {
-        return localTilesPositions;
+        return localTilesPositions.Count;
     }
 
+    private WaitForSeconds waitForSeconds;
     public IEnumerator PlaceInEveryCellCoroutine(GameObject obj, List<GameObject> collectablesList, Transform parent) 
     {
-        foreach (Vector3Int tile in localTilesPositions)
+        //for (int i = localTilesPositions.Count - 1; i>=0; i--)
+        for (int i = 0; i< localTilesPositions.Count ; i++)
         {
-            GameObject newCollectable = Instantiate(obj, tileMap.CellToWorld(tile) + Vector3.one, Quaternion.identity, parent);
+            GameObject newCollectable = Instantiate(obj, tileMap.CellToWorld(localTilesPositions[i]) + Vector3.one, Quaternion.identity, parent);
             collectablesList.Add(newCollectable);
-
-            yield return null;
+            float nextPeriodToWait = UnityEngine.Random.Range(0.2f, 0.5f);
+            yield return new WaitForSeconds(nextPeriodToWait);
         }
     }
 
@@ -114,6 +116,7 @@ public class LevelController : MonoBehaviour
         }
     }
 
+
     internal void CreateNextLevel()
     {
         currentLevel++;
@@ -130,25 +133,10 @@ public class LevelController : MonoBehaviour
         }
     }
 
-    
-    private void GetCurrentTiles() {
-        foreach (Vector3Int pos in localTilesPositions) {
-            Debug.Log(pos);
-        }
-    }
-
-
-    private void OnDrawGizmos()
+    private void OnDisable()
     {
-        if (localTilesPositions == null)
-            return;
-
-        Gizmos.color = Color.red;
-
-        foreach (Vector3Int pos in localTilesPositions)
-        {
-            Gizmos.DrawSphere(tileMap.CellToWorld(pos) + Vector3.one, 0.5f);
-           // Debug.Log(pos);
-        }
+        StopAllCoroutines();
     }
+
+
 }
