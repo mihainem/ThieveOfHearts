@@ -37,7 +37,8 @@ public class LevelController : MonoBehaviour
 
     public void CreateLevel()
     {
-        SetupTiles(levelTiles[1]);
+        ClearTiles();
+        SetupTiles(levelTiles[currentLevel]);
     }
 
     internal Vector3 GetLeftBottomCellPosition()
@@ -47,7 +48,6 @@ public class LevelController : MonoBehaviour
 
     public void SetupTiles(int[,] levelTiles)
     {
-        ClearTiles();
 
         localTilesPositions = new List<Vector3Int>(levelTiles.GetLength(0) * levelTiles.GetLength(1));
         int yLength = levelTiles.GetLength(0);
@@ -85,13 +85,12 @@ public class LevelController : MonoBehaviour
         return localTilesPositions;
     }
 
-    public IEnumerator PlaceInEveryCellCoroutine(GameObject obj, Transform parent) 
+    public IEnumerator PlaceInEveryCellCoroutine(GameObject obj, List<GameObject> collectablesList, Transform parent) 
     {
-        
-      //  GameObject newObj = Instantiate(obj);
         foreach (Vector3Int tile in localTilesPositions)
         {
-            Instantiate(obj, tileMap.CellToWorld(tile) + Vector3.one, Quaternion.identity, parent);
+            GameObject newCollectable = Instantiate(obj, tileMap.CellToWorld(tile) + Vector3.one, Quaternion.identity, parent);
+            collectablesList.Add(newCollectable);
 
             yield return null;
         }
@@ -114,6 +113,13 @@ public class LevelController : MonoBehaviour
             mask.gameObject.SetActive(false);
         }
     }
+
+    internal void CreateNextLevel()
+    {
+        currentLevel++;
+        CreateLevel();
+    }
+
     private void SetupPath(List<Vector3Int> localTilesPositions, Tilemap baseLevel)
     {
         for (int i=0; i< localTilesPositions.Count; i++)

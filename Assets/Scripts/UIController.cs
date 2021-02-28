@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,29 +10,40 @@ public class UIController : MonoBehaviour
     public Canvas worldCanvas;
     public Canvas cameraCanvas;
     public Camera mainCamera;
+
+    [Space(10f)]
     public TextMeshProUGUI timerText;
     public Image timerFillImage;
     public UIElement collection;
-    [SerializeField] private GameObject tapToPlayPanel;
+    
+
+    [Space(10f),Header("Popups")]
+    [SerializeField] private Window tapToPlayPanel;
+    [SerializeField] private MessagePanel winPanel;
+    [SerializeField] private Window losePanel;
 
 
-   // [SerializeField] private UIElement starsUI;
-   //[SerializeField] private UIElement coinsUI;
-   // [SerializeField] private UIElement timerUI;
-
-
-    public void ShowMainMenu()
+    private void Start()
     {
-     //   mainMenu.ShowWindow();
+        winPanel.HideWindow();
+        losePanel.HideWindow();
     }
 
-    public void SetCoins(int value)
+    internal void TryShowFailedPanel()
     {
-      //  coinsUI.elementValue.text = value.ToString();
+        if (!winPanel.isActiveAndEnabled) {
+            losePanel.ShowWindow();
+        }
     }
 
-    internal void SetStars(int value)
+    internal void ShowWinPanel(int totalCollected)
     {
-      //  starsUI.elementValue.text = value.ToString();
+        winPanel.SetText($"Good job robin' {Environment.NewLine} you now have {totalCollected} more hearts under your hood ;)");
+         winPanel.ShowWindow();
+    }
+
+    internal void ShowTapToPlayPanel()
+    {
+        tapToPlayPanel.ShowWindow();
     }
 }

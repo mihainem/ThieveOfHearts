@@ -17,11 +17,19 @@ public class GameManager : MonoBehaviour, ITimedItem
         }
     }
 
+
     [SerializeField] private Movement movements;
     [SerializeField] private LevelController levelController;
     [SerializeField] private UIController ui;
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private Transform collectablesParent;
 
+    private List<GameObject> collectablesList;
+    private MovingObject movingObjectProcessor;
+
+
+    [SerializeField] private int maxTimeInSeconds= 5;
+    
     private int _totalCollected;
     public int TotalCollected 
     {
@@ -30,26 +38,15 @@ public class GameManager : MonoBehaviour, ITimedItem
             return _totalCollected;   
         }
         set {
+            Debug.LogError("Setting total collected");
             _totalCollected = value;
             ui.collection.elementValue.text = _totalCollected.ToString();
         }
     }
 
+
     private Timer timer;
 
-    private int _timer;
-    public int Timer
-    {
-        get
-        {
-            return _timer;
-        }
-        set
-        {
-            _timer = value;
-            ui.timerText.text = _timer.ToString();
-        }
-    }
 
     private void Awake()
     {
@@ -57,14 +54,10 @@ public class GameManager : MonoBehaviour, ITimedItem
         
     }
 
-    private void OnTimerEnded()
-    {
-        Debug.Log("Timer Ended");
-    }
-
     private void Start()
     {
         levelController.CreateLevel();
+        ui.ShowTapToPlayPanel();
     }
 
     public void StartPlay() 
@@ -77,7 +70,7 @@ public class GameManager : MonoBehaviour, ITimedItem
 
     private void StartTimer()
     {
-        timer = new Timer(TimeManager.Instance, 30f, this);
+        timer = new Timer(TimeManager.Instance, maxTimeInSeconds, this);
     }
 
     private void PlacePlayerInTheLeftBottomCell()
@@ -87,20 +80,28 @@ public class GameManager : MonoBehaviour, ITimedItem
 
     private void PlaceCollectablesInEveryCell() 
     {
-        GameObject collectables = new GameObject();
-        collectables.name = "Collectables";
-        collectables.transform.localScale = Vector3.one;
-        collectables.AddComponent<RectTransform>();
-        collectables.transform.SetParent(ui.worldCanvas.transform,false);
-        StartCoroutine(levelController.PlaceInEveryCellCoroutine(ResourcesManager.Instance.Heart, collectables.transform));
+        collectablesList = new List<GameObject>();
+        StartCoroutine(levelController.PlaceInEveryCellCoroutine(ResourcesManager.Instance.Heart, collectablesList, collectablesParent));
+    }
+
+    private void ClearAllCollectables() 
+    {
+        for (int i = collectablesParent.childCount - 1; i >= 0; i--) 
+        {
+            Destroy(collectablesParent.GetChild(i).gameObject);
+        }
     }
 
     internal void ProcessCollecting(Collectable collectable, Action callback = null)
     {
         collectable.enabled = false;
-        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 2f, null,
+        movingObjectProcessor = TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 0.5f, null,
             delegate () {
-                TotalCollected++;
+                TotalCollected += 1;
+                if (TotalCollected == 2) 
+                {
+                    ui.ShowWinPanel(TotalCollected);
+                }
                 collectable.gameObject.SetActive(false);
                 callback?.Invoke();
             });
@@ -109,18 +110,42 @@ public class GameManager : MonoBehaviour, ITimedItem
     private void Reset() 
     {
         TotalCollected = 0;
-        Timer = 30;
+        ClearAllCollectables();
+        TimeManager.Instance.Remove(movingObjectProcessor);
+        movingObjectProcessor = null;
     }
 
     public void ProcessTimePassing()
     {
         ui.timerFillImage.fillAmount = timer.normalizedTime;
-        Timer = 30 - (int)timer.elapsedTime;
+        ui.timerText.text = $"{maxTimeInSeconds - (int)timer.elapsedTime}";
     }
 
     public void ProcessTimeEnded()
     {
-        Debug.Log(timer.elapsedTime);
-        //throw new NotImplementedException();
+        playerMovement.SetStartAction(false);
+        TimeManager.Instance.DelayedCall(1f, ui.TryShowFailedPanel);
+    }
+
+
+    internal void RetryLevel()
+    {
+        Reset();
+        levelController.CreateLevel();
+        ui.ShowTapToPlayPanel();
+        
+    }
+
+    internal void PlayNextLevel()
+    {
+        Reset();
+        levelController.CreateNextLevel();
+        ui.ShowTapToPlayPanel();
+    }
+
+
+    void OnDisable() 
+    {
+        Reset();
     }
 }

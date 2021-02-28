@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: levelTiles
   m_EditorClassIdentifier: 
   m_DefaultSprite: {fileID: 21300000, guid: 7dda13f6701bb914d9e65e83999ce4c4, type: 3}
-  m_DefaultGameObject: {fileID: 7015976023742362290, guid: 68dc527c44ae701469fa513c0abdd7d5,
-    type: 3}
-  m_DefaultColliderType: 2
+  m_DefaultGameObject: {fileID: 0}
+  m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 14
     m_Sprites:

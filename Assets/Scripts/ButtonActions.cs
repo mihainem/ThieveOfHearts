@@ -14,4 +14,13 @@ public class ButtonActions : MonoBehaviour
     {
         GameManager.Instance.StartPlay();
     }
+
+    public void RetryLevel() 
+    {
+        GameManager.Instance.RetryLevel();
+    }
+    public void PlayNextLevel() 
+    {
+        GameManager.Instance.PlayNextLevel();
+    }
 }
