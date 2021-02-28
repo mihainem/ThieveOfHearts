@@ -3,17 +3,20 @@ using UnityEngine;
 
 public class Timer : ITimedItem, IDisposable
 {
-    protected float elapsedTime = 0f;
+    public float elapsedTime = 0f;
     protected float animationTime = 1f;
-    protected float normalizedTime;
+    public float normalizedTime;
     protected Action callback;
     protected ITimersContainer container;
+    protected ITimedItem timedItem;
 
-    public Timer(ITimersContainer container, float animationTime, Action callback = null)
+    public Timer(ITimersContainer container, float animationTime, ITimedItem timedItem = null, Action callback = null)
     {
         this.container = container;
         this.callback = callback;
         this.animationTime = animationTime;
+        this.timedItem = timedItem;
+        container.containedItems.Add(this);
     }
 
     public void Dispose()
@@ -29,12 +32,13 @@ public class Timer : ITimedItem, IDisposable
             elapsedTime -= animationTime;
 
             ProcessTimeEnded();
+            timedItem?.ProcessTimeEnded();
         }
         normalizedTime = elapsedTime / animationTime;
 
         DoActionWhileTimePassing();
+        timedItem?.ProcessTimePassing();
     }
-
 
     protected virtual void DoActionWhileTimePassing() { }
 

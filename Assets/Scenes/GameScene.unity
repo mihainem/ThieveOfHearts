@@ -8894,7 +8894,7 @@ GameObject:
   - component: {fileID: 1544958078}
   - component: {fileID: 1544958077}
   m_Layer: 5
-  m_Name: ImageFill
+  m_Name: TimeImageFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9560,7 +9560,8 @@ MonoBehaviour:
   worldCanvas: {fileID: 400595122}
   cameraCanvas: {fileID: 1151579422}
   mainCamera: {fileID: 519420031}
-  timeElapsing: {fileID: 1594088326}
+  timerText: {fileID: 1594088326}
+  timerFillImage: {fileID: 1544958077}
   collection: {fileID: 173922646}
   tapToPlayPanel: {fileID: 25887926}
 --- !u!4 &1828604064

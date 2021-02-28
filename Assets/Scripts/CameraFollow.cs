@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour {
+public class CameraFollow : MonoBehaviour
+{
 
     [SerializeField] private Transform target;
     private Transform _transform;
@@ -27,7 +28,7 @@ public class CameraFollow : MonoBehaviour {
             );
     }
 
-    public void SetLimits(Vector3 minLimit, Vector3 maxLimit) 
+    public void SetLimits(Vector3 minLimit, Vector3 maxLimit)
     {
         this.minLimit = minLimit;
         this.maxLimit = maxLimit;

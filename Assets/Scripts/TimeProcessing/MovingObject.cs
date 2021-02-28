@@ -10,7 +10,7 @@ public class MovingObject : Timer, ITimedItem
     private bool shouldAnimateX;
     private MovementCurve movement;
 
-    public MovingObject(ITimersContainer manager, MovementCurve movementCurve, Transform objToMove, Vector3 moveTo, float animationTime, Action callback = null) : base(manager, animationTime, callback)
+    public MovingObject(ITimersContainer manager, MovementCurve movementCurve, Transform objToMove, Vector3 moveTo, float animationTime, ITimedItem timedItem = null, Action callback = null) : base(manager, animationTime, timedItem, callback)
     {
         this.movement = movementCurve;
         this.objToMove = objToMove;

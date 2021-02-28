@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
     public Canvas worldCanvas;
     public Canvas cameraCanvas;
     public Camera mainCamera;
-    public TextMeshProUGUI timeElapsing;
+    public TextMeshProUGUI timerText;
+    public Image timerFillImage;
     public UIElement collection;
     [SerializeField] private GameObject tapToPlayPanel;
 

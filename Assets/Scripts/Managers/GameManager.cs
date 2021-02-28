@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, ITimedItem
 {
     private static GameManager instance;
     public static GameManager Instance
@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private Timer timer;
+
     private int _timer;
     public int Timer
     {
@@ -45,13 +47,19 @@ public class GameManager : MonoBehaviour
         set
         {
             _timer = value;
-            ui.timeElapsing.text = _timer.ToString();
+            ui.timerText.text = _timer.ToString();
         }
     }
 
     private void Awake()
     {
         instance = this;
+        
+    }
+
+    private void OnTimerEnded()
+    {
+        Debug.Log("Timer Ended");
     }
 
     private void Start()
@@ -64,9 +72,13 @@ public class GameManager : MonoBehaviour
         PlacePlayerInTheLeftBottomCell();
         playerMovement.SetStartAction(true);
         PlaceCollectablesInEveryCell();
+        StartTimer();
     }
 
-  
+    private void StartTimer()
+    {
+        timer = new Timer(TimeManager.Instance, 30f, this);
+    }
 
     private void PlacePlayerInTheLeftBottomCell()
     {
@@ -86,7 +98,7 @@ public class GameManager : MonoBehaviour
     internal void ProcessCollecting(Collectable collectable, Action callback = null)
     {
         collectable.enabled = false;
-        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 2f, 
+        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 2f, null,
             delegate () {
                 TotalCollected++;
                 collectable.gameObject.SetActive(false);
@@ -98,5 +110,17 @@ public class GameManager : MonoBehaviour
     {
         TotalCollected = 0;
         Timer = 30;
+    }
+
+    public void ProcessTimePassing()
+    {
+        ui.timerFillImage.fillAmount = timer.normalizedTime;
+        Timer = 30 - (int)timer.elapsedTime;
+    }
+
+    public void ProcessTimeEnded()
+    {
+        Debug.Log(timer.elapsedTime);
+        //throw new NotImplementedException();
     }
 }

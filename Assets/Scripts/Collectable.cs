@@ -7,7 +7,6 @@ public class Collectable : MonoBehaviour, ICollectable
     public void FlyToRecipient()
     {
         GameManager.Instance.ProcessCollecting(this);
-        Debug.Log("Flying To recipient",gameObject);
     }
 
     public void UpdateCounter()

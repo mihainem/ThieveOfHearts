@@ -25,13 +25,13 @@ public class PlayerMovement : MonoBehaviour
         _transform = this.transform;
         _rigidbody = this.GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
-        _rigidbody.isKinematic = true;
+        SetStartAction(false);
     }
 
     public void SetStartAction(bool active) 
     {
         startAction = active;
-        _rigidbody.isKinematic = !active;
+        _rigidbody.bodyType = active ? RigidbodyType2D.Dynamic : RigidbodyType2D.Static;
     }
 
 
@@ -40,7 +40,8 @@ public class PlayerMovement : MonoBehaviour
         if (!startAction)
             return;
 
-        _rigidbody.AddRelativeForce(directionVector * speed - _rigidbody.velocity);
+         _rigidbody.AddRelativeForce(directionVector * speed - _rigidbody.velocity);
+        //_rigidbody.MovePosition(_rigidbody.position + Vector3.up * _rigidbody.velocity + directionVector * speed * Time.fixedDeltaTime); //.AddRelativeForce(directionVector * speed - _rigidbody.velocity);
         if (Input.GetKeyDown(KeyCode.Space)){
             if (Mathf.Abs(_rigidbody.velocity.y) < 0.01f)
             {
@@ -76,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
     private void Jump() {
         _animator.SetTrigger("Jump");
         _rigidbody.AddRelativeForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+
         _rigidbody.velocity = new Vector2(_rigidbody.velocity.x * 0.5f, _rigidbody.velocity.y);
     }
     private void JumpAndChangeDirection() {

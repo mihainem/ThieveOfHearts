@@ -40,14 +40,14 @@ public class TimeManager : MonoBehaviour, ITimersContainer
 
     public Timer DelayedCall(float delayTime, Action callback)
     {
-        Timer delayedCall = new Timer(this, delayTime, callback);
+        Timer delayedCall = new Timer(this, delayTime,null, callback);
         containedItems.Add(delayedCall);
         return delayedCall;
     }
 
-    public ImageFillProcessor FillImageProgress(Image image, float animationTime, bool clockwise, Action callback)
+    public ImageFillProcessor FillImageProgress(Image image, float animationTime, bool clockwise, Action callback, ITimedItem timedItem = null)
     {
-        ImageFillProcessor imageFillProcessor = new ImageFillProcessor(this, image, animationTime, clockwise, callback);
+        ImageFillProcessor imageFillProcessor = new ImageFillProcessor(this, image, animationTime, clockwise, timedItem,  callback);
         containedItems.Add(imageFillProcessor);
         return imageFillProcessor;
     }
@@ -57,9 +57,9 @@ public class TimeManager : MonoBehaviour, ITimersContainer
         containedItems.Add(imageFillProcessor);
     }
 
-    public MovingObject Move(Transform objToMove, Vector3 moveTo, float animationTime, Action callback = null)
+    public MovingObject Move(Transform objToMove, Vector3 moveTo, float animationTime, ITimedItem timedItem = null, Action callback = null)
     {
-        MovingObject movingObject = new MovingObject(this, movements[0], objToMove, moveTo, animationTime, callback);
+        MovingObject movingObject = new MovingObject(this, movements[0], objToMove, moveTo, animationTime, timedItem,  callback);
         containedItems.Add(movingObject);
         return movingObject;
     }
