@@ -17,17 +17,17 @@ public class GameManager : MonoBehaviour, ITimedItem
         }
     }
 
-
-    [SerializeField] private Movement movements;
-    [SerializeField] private LevelController levelController;
     [SerializeField] private UIController ui;
-    [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private Transform collectablesParent;
 
+    [SerializeField] private LevelController levelController;
+    [SerializeField] private PlayerController playerController;
+    
+    [SerializeField] private Transform collectablesParent;
     private List<GameObject> collectablesList;
 
-
-    [SerializeField] private int maxTimeInSeconds= 5;
+    [SerializeField] private int timeToWaitForEveryTile = 3;
+    private Timer timer;
+    private int maxTimeInSeconds = 30;
     
     private int _totalCollected;
     public int TotalCollected 
@@ -43,13 +43,9 @@ public class GameManager : MonoBehaviour, ITimedItem
     }
 
 
-    private Timer timer;
-
-
     private void Awake()
     {
-        instance = this;
-        
+        instance = this;        
     }
 
     private void Start()
@@ -61,20 +57,20 @@ public class GameManager : MonoBehaviour, ITimedItem
     public void StartPlay() 
     { 
         PlacePlayerInTheLeftBottomCell();
-        playerMovement.SetStartAction(true);
+        playerController.SetStartAction(true);
         PlaceCollectablesInEveryCell();
         StartTimer();
     }
 
     private void StartTimer()
     {
-        maxTimeInSeconds = levelController.GetNoOfTiles() * 3;
+        maxTimeInSeconds = levelController.GetNoOfTiles() * timeToWaitForEveryTile;
         timer = new Timer(TimeManager.Instance, maxTimeInSeconds, this);
     }
 
     private void PlacePlayerInTheLeftBottomCell()
     {
-        playerMovement.transform.position = levelController.GetLeftBottomCellPosition();
+        playerController.transform.position = levelController.GetLeftBottomCellPosition();
     }
 
     private void PlaceCollectablesInEveryCell() 
@@ -102,9 +98,9 @@ public class GameManager : MonoBehaviour, ITimedItem
         TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 0.5f, null,
             delegate () {
                 TotalCollected++;
-                if (TotalCollected >= collectablesList.Count) 
+                if (TotalCollected >= collectablesList.Count)
                 {
-                    ui.ShowWinPanel(TotalCollected);
+                    ProcessTimeEnded();
                 }
                 collectable.gameObject.SetActive(false);
                 callback?.Invoke();
@@ -126,10 +122,23 @@ public class GameManager : MonoBehaviour, ITimedItem
     public void ProcessTimeEnded()
     {
         TimeManager.Instance.Remove(timer);
-        playerMovement.SetStartAction(false);
-        TimeManager.Instance.DelayedCall(1f, ui.TryShowFailedPanel);
+        playerController.SetStartAction(false);
+        TimeManager.Instance.DelayedCall(1f, ShowWinOrFail);
     }
 
+    private void ShowWinOrFail()
+    {
+
+        if (TotalCollected >= collectablesList.Count)
+        {
+            ui.ShowWinPanel(TotalCollected);
+        }
+        else
+        {
+            ui.TryShowFailedPanel();
+            
+        }
+    }
 
     internal void RetryLevel()
     {

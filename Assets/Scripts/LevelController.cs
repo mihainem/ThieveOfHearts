@@ -6,7 +6,9 @@ using UnityEngine.Tilemaps;
 
 public class LevelController : MonoBehaviour
 {
-    private List<int[,]> levelTiles = new List<int[,]> {
+
+    //representation of each level in 0s and 1s
+    private List<int[,]> levels = new List<int[,]> {
         new int[,]{
         {1,1,1,0,1,0,1},
         {0,0,1,1,1,1,1},
@@ -38,7 +40,7 @@ public class LevelController : MonoBehaviour
     public void CreateLevel()
     {
         ClearTiles();
-        SetupTiles(levelTiles[currentLevel]);
+        SetupTiles(levels[currentLevel]);
     }
 
     internal Vector3 GetLeftBottomCellPosition()
@@ -88,7 +90,6 @@ public class LevelController : MonoBehaviour
     private WaitForSeconds waitForSeconds;
     public IEnumerator PlaceInEveryCellCoroutine(GameObject obj, List<GameObject> collectablesList, Transform parent) 
     {
-        //for (int i = localTilesPositions.Count - 1; i>=0; i--)
         for (int i = 0; i< localTilesPositions.Count ; i++)
         {
             GameObject newCollectable = Instantiate(obj, tileMap.CellToWorld(localTilesPositions[i]) + Vector3.one, Quaternion.identity, parent);
@@ -119,7 +120,7 @@ public class LevelController : MonoBehaviour
 
     internal void CreateNextLevel()
     {
-        currentLevel++;
+        currentLevel = (currentLevel + 1) % levels.Count;
         CreateLevel();
     }
 

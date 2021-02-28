@@ -12,7 +12,6 @@ public class Collectable : MonoBehaviour , ICollectable
 
     public void UpdateCounter()
     {
-        Debug.Log("Updating Counter");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

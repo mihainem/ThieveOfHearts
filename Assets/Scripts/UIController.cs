@@ -46,4 +46,9 @@ public class UIController : MonoBehaviour
     {
         tapToPlayPanel.ShowWindow();
     }
+
+    internal void ShowWinOrFail()
+    {
+        throw new NotImplementedException();
+    }
 }

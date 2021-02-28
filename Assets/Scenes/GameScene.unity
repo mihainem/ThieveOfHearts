@@ -8900,12 +8900,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c917b0aaa5325554da11931066945d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movements: {fileID: 892614846}
-  levelController: {fileID: 469963712}
   ui: {fileID: 1828604063}
-  playerMovement: {fileID: 1356902582}
+  levelController: {fileID: 469963712}
+  playerController: {fileID: 1356902582}
   collectablesParent: {fileID: 90345267}
-  maxTimeInSeconds: 5
+  timeToWaitForEveryTile: 3
 --- !u!4 &1075161534
 Transform:
   m_ObjectHideFlags: 0
@@ -9558,7 +9557,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1356902577}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 511d4941dd8843e44a786d7aa369d49a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2339b912340cb004da37dcecd848dfdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
