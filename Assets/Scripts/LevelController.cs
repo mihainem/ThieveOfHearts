@@ -6,8 +6,22 @@ using UnityEngine.Tilemaps;
 
 public class LevelController : MonoBehaviour
 {
-    
-    
+    private List<int[,]> levelTiles = new List<int[,]> {
+        new int[,]{
+        {1,1,1,0,1,0,1},
+        {0,0,1,1,1,1,1},
+        {0,0,1,0,1,0,1},
+        {1,1,1,0,1,0,1}
+        },
+        new int[,]{
+        {1,1,1,0,1,1,1},
+        {1,0,1,1,1,0,1},
+        {1,1,1,0,1,1,1},
+        {1,0,1,1,1,0,1}}
+    };
+
+    private int currentLevel = 0;
+
     private List<Vector3Int> localTilesPositions;
     public TileBase tileBase;
     public GameObject tileMasksParent;
@@ -21,40 +35,15 @@ public class LevelController : MonoBehaviour
         spriteMasks = GetComponentsInChildren<SpriteMask>(true);
     }
 
-    internal void PlaceInLeftBottomCell(PlayerMovement playerMovement)
+    public void CreateLevel()
     {
-        playerMovement.transform.position = tileMap.GetCellCenterWorld(leftBottomCell);
+        SetupTiles(levelTiles[1]);
     }
 
-    /*
-   private void Start()
-   {
-       SetupTiles(levelTiles);
-   }
-
-   public bool setTile = false;
-   public bool clearTiles = false;
-   public  bool getCurrentTiles = false;
-
-   void Update()
-   {
-       if (setTile) {
-           SetupTiles(levelTiles2);
-           setTile = false;
-       }
-
-       if (clearTiles)
-       {
-           ClearTiles();
-           clearTiles = false;
-       } 
-
-       if (getCurrentTiles)
-       {
-           GetCurrentTiles();
-           getCurrentTiles = false;
-       }
-   }*/
+    internal Vector3 GetLeftBottomCellPosition()
+    {
+        return tileMap.GetCellCenterWorld(leftBottomCell);
+    }
 
     public void SetupTiles(int[,] levelTiles)
     {
@@ -89,6 +78,23 @@ public class LevelController : MonoBehaviour
         AddLeftBottomCell();
 
         SetupPath(localTilesPositions, tileMap);
+    }
+
+    internal List<Vector3Int> GetAllTiles()
+    {
+        return localTilesPositions;
+    }
+
+    public IEnumerator PlaceInEveryCellCoroutine(GameObject obj, Transform parent) 
+    {
+        
+      //  GameObject newObj = Instantiate(obj);
+        foreach (Vector3Int tile in localTilesPositions)
+        {
+            Instantiate(obj, tileMap.CellToWorld(tile) + Vector3.one, Quaternion.identity, parent);
+
+            yield return null;
+        }
     }
 
     private void AddLeftBottomCell()

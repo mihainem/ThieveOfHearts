@@ -6,12 +6,13 @@ public class Collectable : MonoBehaviour, ICollectable
 {
     public void FlyToRecipient()
     {
-        Debug.Log("Flying To recipient");
+        GameManager.Instance.ProcessCollecting(this);
+        Debug.Log("Flying To recipient",gameObject);
     }
 
     public void UpdateCounter()
     {
-        Debug.Log("Updating Counter");
+      //  Debug.Log("Updating Counter");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

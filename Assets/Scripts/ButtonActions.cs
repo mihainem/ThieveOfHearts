@@ -9,4 +9,9 @@ public class ButtonActions : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene");
     }
+
+    public void StartPlay() 
+    {
+        GameManager.Instance.StartPlay();
+    }
 }

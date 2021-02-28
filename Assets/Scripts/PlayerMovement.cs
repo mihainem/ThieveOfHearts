@@ -18,18 +18,28 @@ public class PlayerMovement : MonoBehaviour
     private Transform _transform;
     private Rigidbody2D _rigidbody;
     private Animator _animator;
+    private bool startAction = false;
 
     private void Awake()
     {
         _transform = this.transform;
         _rigidbody = this.GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
-        
+        _rigidbody.isKinematic = true;
+    }
+
+    public void SetStartAction(bool active) 
+    {
+        startAction = active;
+        _rigidbody.isKinematic = !active;
     }
 
 
     private void FixedUpdate()
     {
+        if (!startAction)
+            return;
+
         _rigidbody.AddRelativeForce(directionVector * speed - _rigidbody.velocity);
         if (Input.GetKeyDown(KeyCode.Space)){
             if (Mathf.Abs(_rigidbody.velocity.y) < 0.01f)
