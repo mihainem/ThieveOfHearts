@@ -10,7 +10,7 @@ public class MovingObject : Timer, ITimedItem
     private bool shouldAnimateX;
     private MovementCurve movement;
 
-    public MovingObject(ITimersContainer manager, MovementCurve movementCurve, Transform objToMove, Vector3 moveTo, float animationTime, ITimedItem timedItem = null, Action callback = null) : base(manager, animationTime, timedItem, callback)
+    public MovingObject(ITimersContainer manager, MovementCurve movementCurve, Transform objToMove, Vector3 moveTo, float animationTime,  Action callback = null) : base(manager, animationTime, null, callback)
     {
         this.movement = movementCurve;
         this.objToMove = objToMove;
@@ -25,7 +25,6 @@ public class MovingObject : Timer, ITimedItem
 
         if (objToMove != null)
         {
-            //Vector3 toAdd = (shouldAnimateX ? Vector3.right : Vector3.up) * positionOffset;
             objToMove.position = Vector3.Lerp(moveFrom, moveTo - positionOffset, normalizedTime) + positionOffset;
         }
         else

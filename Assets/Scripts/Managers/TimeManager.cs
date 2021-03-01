@@ -45,21 +45,9 @@ public class TimeManager : MonoBehaviour, ITimersContainer
         return delayedCall;
     }
 
-    public ImageFillProcessor FillImageProgress(Image image, float animationTime, bool clockwise, Action callback, ITimedItem timedItem = null)
+    public MovingObject Move(Transform objToMove, Vector3 moveTo, float animationTime, Action callback = null)
     {
-        ImageFillProcessor imageFillProcessor = new ImageFillProcessor(this, image, animationTime, clockwise, timedItem,  callback);
-        containedItems.Add(imageFillProcessor);
-        return imageFillProcessor;
-    }
-
-    public void FillImageProgress(ImageFillProcessor imageFillProcessor)
-    {
-        containedItems.Add(imageFillProcessor);
-    }
-
-    public MovingObject Move(Transform objToMove, Vector3 moveTo, float animationTime, ITimedItem timedItem = null, Action callback = null)
-    {
-        MovingObject movingObject = new MovingObject(this, movements[0], objToMove, moveTo, animationTime, timedItem,  callback);
+        MovingObject movingObject = new MovingObject(this, movements[0], objToMove, moveTo, animationTime,  callback);
         containedItems.Add(movingObject);
         return movingObject;
     }

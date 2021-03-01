@@ -42,11 +42,11 @@ public class Timer : ITimedItem, IDisposable
         }
         normalizedTime = elapsedTime / animationTime;
 
-      
-            DoActionWhileTimePassing();
-     
-            timedItem?.ProcessTimePassing();
-        
+
+        DoActionWhileTimePassing();
+
+        timedItem?.ProcessTimePassing();
+
     }
 
     protected virtual void DoActionWhileTimePassing() { }

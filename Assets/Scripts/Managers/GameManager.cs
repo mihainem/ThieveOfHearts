@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour, ITimedItem
     internal void ProcessCollecting(Collectable collectable, Action callback = null)
     {
         collectable.enabled = false;
-        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, flyingCollectableTime, null,
+        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, flyingCollectableTime,
             delegate () {
                 TotalCollected++;
                 if (TotalCollected >= collectablesList.Count)

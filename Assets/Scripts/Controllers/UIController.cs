@@ -7,10 +7,6 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    public Canvas worldCanvas;
-    public Canvas cameraCanvas;
-    public Camera mainCamera;
-
     [Space(10f)]
     public TextMeshProUGUI timerText;
     public Image timerFillImage;
@@ -45,10 +41,5 @@ public class UIController : MonoBehaviour
     internal void ShowTapToPlayPanel()
     {
         tapToPlayPanel.ShowWindow();
-    }
-
-    internal void ShowWinOrFail()
-    {
-        throw new NotImplementedException();
     }
 }
