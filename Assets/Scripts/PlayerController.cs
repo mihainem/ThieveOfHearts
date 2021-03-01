@@ -47,11 +47,6 @@ public class PlayerController : MonoBehaviour
             {
                 JumpAndChangeDirection();
             }
-            else
-            {
-                Debug.LogError("not jumping");
-            }
-
         }
     }
 

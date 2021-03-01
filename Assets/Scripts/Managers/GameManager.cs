@@ -22,13 +22,14 @@ public class GameManager : MonoBehaviour, ITimedItem
     [SerializeField] private LevelController levelController;
     [SerializeField] private PlayerController playerController;
     
-    [SerializeField] private Transform collectablesParent;
-    private List<GameObject> collectablesList;
-
     [SerializeField] private int timeToWaitForEveryTile = 3;
     private Timer timer;
     private int maxTimeInSeconds = 30;
     
+    
+    [SerializeField] private Transform collectablesParent;
+    private List<GameObject> collectablesList;
+    private float flyingCollectableTime = 1f;
     private int _totalCollected;
     public int TotalCollected 
     {
@@ -41,7 +42,6 @@ public class GameManager : MonoBehaviour, ITimedItem
             ui.collection.elementValue.text = _totalCollected.ToString();
         }
     }
-
 
     private void Awake()
     {
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour, ITimedItem
     internal void ProcessCollecting(Collectable collectable, Action callback = null)
     {
         collectable.enabled = false;
-        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, 0.5f, null,
+        TimeManager.Instance.Move(collectable.transform, ui.collection.icon.position, flyingCollectableTime, null,
             delegate () {
                 TotalCollected++;
                 if (TotalCollected >= collectablesList.Count)
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour, ITimedItem
     {
         TimeManager.Instance.Remove(timer);
         playerController.SetStartAction(false);
-        TimeManager.Instance.DelayedCall(1f, ShowWinOrFail);
+        TimeManager.Instance.DelayedCall(flyingCollectableTime, ShowWinOrFail);
     }
 
     private void ShowWinOrFail()

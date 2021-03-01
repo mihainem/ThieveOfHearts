@@ -92,7 +92,8 @@ public class LevelController : MonoBehaviour
     {
         for (int i = 0; i< localTilesPositions.Count ; i++)
         {
-            GameObject newCollectable = Instantiate(obj, tileMap.CellToWorld(localTilesPositions[i]) + Vector3.one, Quaternion.identity, parent);
+            Vector3 cellPosition = tileMap.CellToWorld(localTilesPositions[i]) + Vector3.one;
+            GameObject newCollectable = Instantiate(obj, new Vector3(cellPosition.x, cellPosition.y, 0), Quaternion.identity, parent);
             collectablesList.Add(newCollectable);
             float nextPeriodToWait = UnityEngine.Random.Range(0.2f, 0.5f);
             yield return new WaitForSeconds(nextPeriodToWait);
