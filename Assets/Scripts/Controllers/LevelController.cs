@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
+/// <summary>
+/// LevelController uses tilemap and a tilebase to construct the levels.
+/// lEach level is defined as a two dimensional array of 0s and 1s
+/// </summary>
 public class LevelController : MonoBehaviour
 {
 
@@ -87,7 +92,7 @@ public class LevelController : MonoBehaviour
         return localTilesPositions.Count;
     }
 
-    private WaitForSeconds waitForSeconds;
+
     public IEnumerator PlaceInEveryCellCoroutine(GameObject obj, List<GameObject> collectablesList, Transform parent) 
     {
         for (int i = 0; i< localTilesPositions.Count ; i++)

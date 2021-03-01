@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// PlayerController controls physics manipulation and animations triggering
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;

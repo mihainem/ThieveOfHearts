@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ResourcesManager is a singleton to keep refferences to internal assets
+/// </summary>
 public class ResourcesManager : MonoBehaviour
 {
     private static ResourcesManager instance;

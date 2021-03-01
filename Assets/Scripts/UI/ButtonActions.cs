@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+/// <summary>
+/// ButtonActions is added on buttons to make encapsulate method calls to their own object.
+/// </summary>
 public class ButtonActions : MonoBehaviour
 {
     public void OpenGameScene() 

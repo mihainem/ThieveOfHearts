@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// GameManager is a singletong wich manages all aspects of the game through its controllers (UIController, LevelController, PlayerController)
+/// </summary>
 public class GameManager : MonoBehaviour, ITimedItem
 {
     private static GameManager instance;

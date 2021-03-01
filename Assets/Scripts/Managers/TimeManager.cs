@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// TimeManager is singleton which manages timedObjects, meaning that all existent timedObjects
+/// can be managed in this one single update
+/// </summary>
 public class TimeManager : MonoBehaviour, ITimersContainer
 {
 
@@ -19,7 +23,7 @@ public class TimeManager : MonoBehaviour, ITimersContainer
         }
     }
 
-    [SerializeField] private Movement movements;
+    [SerializeField] private AnimationCurves movements;
 
     public List<ITimedItem> containedItems { get; set; }
 
