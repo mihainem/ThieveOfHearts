@@ -25,6 +25,18 @@ public class GameManager : MonoBehaviour, ITimedItem
     [SerializeField] private int timeToWaitForEveryTile = 3;
     private Timer timer;
     private int maxTimeInSeconds = 30;
+    private int _remainingTime;
+    private int RemainingTime 
+    {
+        get {
+            return _remainingTime;
+        }
+        set {
+            _remainingTime = value;
+            ui.timerText.text = $"{Mathf.Floor(_remainingTime / 60).ToString("00")}:{(_remainingTime % 60).ToString("00")}";
+
+        }
+    }
     
     
     [SerializeField] private Transform collectablesParent;
@@ -70,7 +82,8 @@ public class GameManager : MonoBehaviour, ITimedItem
 
     private void PlacePlayerInTheLeftBottomCell()
     {
-        playerController.transform.position = levelController.GetLeftBottomCellPosition();
+        Vector3 temp = levelController.GetLeftBottomCellPosition();
+        playerController.SetStartPosition(new Vector3(temp.x, temp.y, 0));// .transform.GetComponent<Rigidbody2D>().position = ;
     }
 
     private void PlaceCollectablesInEveryCell() 
@@ -110,14 +123,15 @@ public class GameManager : MonoBehaviour, ITimedItem
     private void Reset() 
     {
         TotalCollected = 0;
+        RemainingTime = 0;
         ClearAllCollectables();
     }
 
     public void ProcessTimePassing()
     {
         ui.timerFillImage.fillAmount = timer.normalizedTime;
-        ui.timerText.text = $"{maxTimeInSeconds - (int)timer.elapsedTime}";
-    }
+        RemainingTime = maxTimeInSeconds - (int)timer.elapsedTime;
+   }
 
     public void ProcessTimeEnded()
     {
