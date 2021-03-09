@@ -2026,7 +2026,7 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
 --- !u!1839735485 &469963708
 Tilemap:
   m_ObjectHideFlags: 0
@@ -2262,7 +2262,7 @@ TilemapCollider2D:
   m_UsedByComposite: 1
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
-  m_ExtrusionFactor: 0.00001
+  m_ExtrusionFactor: 0.33
 --- !u!114 &469963712
 MonoBehaviour:
   m_ObjectHideFlags: 0
